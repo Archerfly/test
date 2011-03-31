@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>jQuery Tutorial 1</title>
+    <meta equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="///Users/avenc/Desktop/test/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript">
+    
+    function processData(weather){//給weather的是一個json物件嗎？
+    		
+    		$('#msg').html(weather.city+weather.temperature+"度"+'C');
+ 	 	  	$('#msg').fadeIn();
+  	 	 	setTimeout(function(){
+   			 	$('#msg').fadeOut();
+    			$('#btn').attr('disabled',false);  
+  			},3000);
+    }
+    //jsonp:'processData'為什麼要這一行
+      function showMsg(e) {  
+    $(e.target).attr('disabled',true);  
+    $.ajax({
+    	dataType:'jsonp',
+    	url:'http://ntu-taiwan-weather.appspot.com/json/current/Taipei/?callback=processData',
+    	jsonp:'processData',
+    	error:function(xhr){
+    		alert('Ajax request發生錯誤');
+    		$(e.target).attr('disabled',false);
+    	}   		
+  		
+    });
+    
+    $.ajax({
+    	url: "http://localhost:8080/",
+    	dataType: "html",
+    	success: function(response){ alert(response); }
+    });
+	
+}
+
+	$(document).ready(function(e){
+		$('#btn').bind('click',showMsg);
+	});
+    </script>
+  </head>
+  <body>
+    <div id="msg" ></div>
+    <input type="button" value="Click Me" id="btn"/>
+    <div id="tmp"></div>
+  </body>
+</html>
